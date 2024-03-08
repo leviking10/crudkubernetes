@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  DB_HOST: mysql-crudkubernetes-db
+  DB_NAME: crudkubernetesdb
+  DB_PASSWORD: user
+  DB_USERNAME: user
+  MYSQL_DATABASE: crudkubernetesdb
+  MYSQL_PASSWORD: user
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_USER: user
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: crudkubernetes-app-env
+  name: env

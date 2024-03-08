@@ -1,0 +1,56 @@
+version: '3.9'
+services:
+  mysql-crudkubernetes-db:
+    image: mysql:8.0
+    container_name: container_mysql-crudkubernetes
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "--password=${MYSQL_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin-crudkubernetes-db:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: container_phpmyadmin-crudkubernetes
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: mysql-crudkubernetes-db
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "8086:80"
+    depends_on:
+      - mysql-crudkubernetes-db
+    restart: unless-stopped
+
+  crudkubernetes-app:
+    build: .
+    container_name: crudkubernetes-app
+    env_file:
+      - .env
+    ports:
+      - "8089:8089"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - mysql-crudkubernetes-db
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+    driver: local
