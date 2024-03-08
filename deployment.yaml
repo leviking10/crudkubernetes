@@ -1,19 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    labels:
-        io.kompose.service: crudkubernetes-app
     name: crudkubernetes-app
 spec:
-    replicas: 1
+    replicas: 2
     selector:
         matchLabels:
-            io.kompose.service: crudkubernetes-app
+            app: crudkubernetes-app
     template:
         metadata:
             labels:
-                io.kompose.network/crudkubernetes-default: "true"
-                io.kompose.service: crudkubernetes-app
+                app: crudkubernetes-app
         spec:
             containers:
                 - env:
@@ -61,7 +58,6 @@ spec:
                   name: crudkubernetes-app
                   ports:
                       - containerPort: 8089
-                        protocol: TCP
             restartPolicy: Always
             imagePullSecrets:
                 - name: regcred
