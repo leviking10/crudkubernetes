@@ -1,9 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    annotations:
-        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
-        kompose.version: 1.32.0 (765fde254)
     labels:
         io.kompose.service: crudkubernetes-app
     name: crudkubernetes-app
@@ -14,9 +11,6 @@ spec:
             io.kompose.service: crudkubernetes-app
     template:
         metadata:
-            annotations:
-                kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
-                kompose.version: 1.32.0 (765fde254)
             labels:
                 io.kompose.network/crudkubernetes-default: "true"
                 io.kompose.service: crudkubernetes-app
@@ -63,11 +57,11 @@ spec:
                             configMapKeyRef:
                                 key: MYSQL_USER
                                 name: env
-                  image: mleviking/crudkubernetes:latest  # Mise à jour avec le nom complet de l'image
+                  image: mleviking/crudkubernetes:latest
                   name: crudkubernetes-app
                   ports:
                       - containerPort: 8089
                         protocol: TCP
             restartPolicy: Always
-            imagePullSecrets:  # Ajout de la section imagePullSecrets
+            imagePullSecrets:
                 - name: regcred
